@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns="http://www.springframework.org/schema/security"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xmlns:beans="http://www.springframework.org/schema/beans"
+             xsi:schemaLocation="http://www.springframework.org/schema/security
+                                 http://www.springframework.org/schema/security/spring-security.xsd
+                                 http://www.springframework.org/schema/beans
+                                 http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+
+    <http>
+        <intercept-url pattern="/login" access="permitAll()"/>
+        <intercept-url pattern="/js/**" access="permitAll()"/>
+        <intercept-url pattern="/css/**" access="permitAll()"/>
+        <intercept-url pattern="/img/**" access="permitAll()"/>
+        <intercept-url pattern="/webjars/**" access="permitAll()"/>
+        <intercept-url pattern="/**" access="isAuthenticated()"/>
+
+        <!--Spring Security 4.0以后默认开启宽展请求伪造保护，这里配置禁用，不安全的操作。-->
+        <csrf disabled="true"/>
+
+        <!--登录-->
+        <form-login login-page="/login"/>
+
+        <!--退出-->
+        <logout invalidate-session="true" logout-url="/logout" logout-success-url="/login?logout"/>
+
+        <!--记住我-->
+        <remember-me key="unique-and-secret" remember-me-cookie="remember-me-cookie-name" token-validity-seconds="86400"/>
+
+    </http>
+
+
+    <!--验证管理-->
+    <authentication-manager>
+        <authentication-provider>
+            <user-service>
+                <user name="zxh" password="666666" authorities="ROLE_USER"/>
+            </user-service>
+        </authentication-provider>
+    </authentication-manager>
+
+</beans:beans>
